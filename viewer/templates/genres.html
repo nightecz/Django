@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Genres in database</h1>
+    <ul>
+        {% for genre in object_list %}
+         <li>
+           {{ genre.name }}
+         </li>
+       {% endfor %}
+    </ul>
+    {% if not object_list %}
+        <p>No genres in database</p>
+    {% endif %}
+    <a href="{% url 'genre_add' %}" class="btn btn-primary">Add genre</a>
+<!--<form method="post">-->
+<!--{% csrf_token %}-->
+<!--<table>{{ form }}</table>-->
+<!--<input type="submit" value="Přidat film" class="btn btn=primary">-->
+<!--    </form>-->
+
+{% endblock %}
