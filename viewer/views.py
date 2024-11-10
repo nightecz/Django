@@ -1,13 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login
 from django.http import HttpResponse
 
 from django.urls import reverse
-from django.views.generic import FormView, ListView, TemplateView
-from viewer.models import Movie, Genre
-from viewer.forms import MovieForm, GenreForm
+from django.views.generic import FormView, ListView, TemplateView, UpdateView
+from viewer.models import Movie, Genre, Actor
+from viewer.forms import MovieForm, GenreForm, SignUpForm, ActorForm
 from django.urls import reverse_lazy
 # Create your views here.
 
@@ -50,6 +50,7 @@ class CustomLoginView(LoginView):
 
     def form_invalid(self, form):
         messages.error(self.request, "Nesprávné uživatelské jméno nebo heslo")
+        # messages.success(self.request, "Přihlášení se podařilo")
         print("Chyba: Nesprávné přihlášení")  # Přidej log pro kontrolu
         return super().form_invalid(form)
 
@@ -93,8 +94,21 @@ class GenreCreateView(FormView):
 class ProfileView(TemplateView):
     template_name = 'profile.html'
 
-class RegistrationView(TemplateView):
-    template_name = 'registration.html'
+
+
+class RegisterView(FormView):
+    template_name = 'registration/register.html'
+    form_class = SignUpForm
+    success_url = reverse_lazy('profile')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect(self.success_url)
+
+    def for_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super().form_invalid(form)
 
 class MovieCreateView(FormView):
     template_name = 'form.html'
@@ -114,3 +128,42 @@ class MovieCreateView(FormView):
         return super().form_valid(form)  # Použij správný název `form_valid`
         print(result)
         return result
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/login')
+        return super().dispatch(request, *args, **kwargs)
+class MovieUpdateView(UpdateView):
+    template_name = 'form.html'
+    form_class = MovieForm
+    model = Movie
+    success_url = reverse_lazy('movies')
+
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('/login')
+        return super().dispatch(request, *args, **kwargs)
+class ActorView(ListView):
+    template_name = 'actors.html'
+    model = Actor
+
+class ActorCreateView(FormView):
+    template_name = 'form.html'
+    form_class = ActorForm
+    success_url = reverse_lazy('actors')
+
+    def form_valid(self, form):
+        cleaned_data = form.cleaned_data
+        Actor.objects.create(
+            first_name=cleaned_data.get('first_name'),
+            last_name=cleaned_data.get('last_name'),
+            birth_date=cleaned_data.get('birth_date')
+        )
+        return super().form_valid(form)
+
+class ActorUpdateView(UpdateView):
+    template_name = 'form.html'
+    form_class = ActorForm
+    model = Actor
+    success_url = reverse_lazy('actors')

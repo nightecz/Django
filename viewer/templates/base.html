@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load active_link_tags %}
 
 <html {% if LANGUAGE_CODE %}lang="{{ LANGUAGE_CODE }}" {% endif %}>
 
@@ -24,37 +25,65 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container fixed">
         <a class="navbar-brand" href="{% url 'index' %}">HollyMovies</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
+        <button
+                class="navbar-toggler" type="button"
+                data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{% url 'index' %}">Home</a>
-            </div>
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{% url 'movies' %}">Movies</a>
-            </div>
-            {% if user.is_authenticated %}
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="#">{{ user.username }}</a>
-                </div>
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{% url 'movie_add' %}">Add movie</a>
-            </div>
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{% url 'genres' %}">Genres</a>
-            </div>
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="{% url 'logout' %}">Odhlášení</a>
-                </div>
-            {% else %}
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                </div>
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="#">Register</a>
-                </div>
-            {% endif %}
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% active_link 'index' strict=True %}" href="{% url 'index' %}">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% active_link 'movies' strict=True %}" href="{% url 'movies' %}">
+                        Movies
+                    </a>
+                </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link {% active_link 'movie_add' strict=True %}" href="{% url 'movie_add' %}">Add movie</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% active_link 'genres' strict=True %}" href="{% url 'genres' %}">Genres</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% active_link 'actors' strict=True %}" href="{% url 'actors' %}">Actors</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'profile' %}">Profil</a>
+                            <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button class="dropdown-item" type="submit">Odhlášení</button>
+                            </form>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link {% active_link 'login' strict=True %}" href="{% url 'login' %}">
+                            Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% active_link '' strict=True %}" href="{% url 'register' %}">
+                            Register
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
         </div>
     </div>
 </nav>

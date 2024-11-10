@@ -21,3 +21,11 @@ class Movie(Model):
 
   def __str__(self):
     return f"{self.title} ({self.released.year})"
+
+class Actor(Model):
+  first_name = CharField(max_length=50)
+  last_name = CharField(max_length=50)
+  birth_date = DateField(default=None)
+
+  def __str__(self):
+    return f"{self.first_name}  ({self.last_name})"

@@ -1,0 +1,6 @@
+1. Buď pomocí bootstrap (což doporučuju) nebo pomocí vlastních css stylů, upravit menu následujicím způsobem:
+    - Rozdělit menu na dvě části: 1. část => Home / Movies / Žánry
+                                  2. část => Login / Registrace (po přihlášení zobrazit jméno a odhlašení)
+    - Bonus: Vytvořit rozbalovací menu z jména uživatele, po kliknutí zobrazit možnost odhlašení a profil
+2. Vytvořit stránku pro zobrazení profilu uživatele, kde zobrazíme username, email, is_staff -> 1 => Admin, pokud 0 -> uživatel, is_active, last_login
+    - Bonus: Pokud je uživatel aktivní vypsat zeleně, pokud není vypsat červeně

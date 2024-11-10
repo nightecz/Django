@@ -19,6 +19,7 @@
             <td>{{ movie.rating }}</td>
             <td>{{ movie.released.year }}</td>
             <td>{{ movie.description }}</td>
+            <td><a href="{% url 'movie_update' movie.id %}" class="btn btn-info">Edit</a></td>
         </tr>
         {% endfor %}
 <!--        podmínka, když není žádný film tak ať hodí hlášku-->

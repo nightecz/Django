@@ -29,8 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_REDIRECT_URL ='/' #po přihlášení vrátí na úvodní stránku
-LOGOUT_REDIRECT_URL ='/login' #po odhlášení vrátí na login
+LOGIN_REDIRECT_URL = '/' #po přihlášení vrátí na úvodní stránku
+LOGOUT_REDIRECT_URL = '/'
+#po odhlášení vrátí na login
 
 
 # Application definition
@@ -42,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'viewer'
+    'viewer',
+    'active_link'
 ]
 
 MIDDLEWARE = [
@@ -118,6 +120,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+# LOCALE_PATHS = ['django\\locale']
 
 
 # Static files (CSS, JavaScript, Images)

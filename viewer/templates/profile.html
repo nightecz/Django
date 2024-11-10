@@ -1,50 +1,26 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container fixed">
-        <a class="navbar-brand" href="{% url 'index' %}">HollyMovies</a>
-        <button
-                class="navbar-toggler" type="button"
-                data-toggle="collapse" data-target="#navbarNavAltMarkup"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'index' %}">
-                        Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'movies' %}">
-                        Movies
-                    </a>
-                </li>
-            </ul>
-            <ul class="navbar-nav">
-            {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{ user.username }}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'profile' %}">Profil</a>
-                        <a class="dropdown-item" href="{% url 'logout' %}">Odhlášení</a>
-                    </div>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">
-                        Login
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        Register
-                    </a>
-                </li>
-            </ul>
-        </div>
-        {% endif %}
+{% extends 'base.html' %}
+
+{% block content %}
+<!--template pro zásah do databáze-->
+<div class="card">
+    <div class="card-header text-center">
+        <h2 class="h2">Profil</h2>
     </div>
-</nav>
+    <div class="card-body">
+        <h5 class="card-title">Informace o uživateli</h5>
+        <p class="card-text">Jméno: {{ user.username }}</p>
+        <p class="card-text">Email: {{ user.email }}</p>
+        {% if user.is_staff == 1 %}
+            <p class="card-text">Role: Admin</p>
+        {% else %}
+            <p class="card-text">Role: Uživatel</p>
+        {% endif %}
+        {% if user.is_active %}
+            <p class="card-text">Stav: <span style="color: green">Aktivní</span></p>
+        {% else %}
+        <p class="card-text">Stav: <span style="color: red">Neaktivní</span></p>
+        {% endif %}
+        <p class="card-text">Poslední přihlašení: {{ user.last_login|date:'H:i:s M d, Y' }}</p>
+    </div>
+</div>
+{% endblock %}
